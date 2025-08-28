@@ -20,7 +20,9 @@ if ! distrobox-list | grep -q "$BOX_NAME"; then
   distrobox-create \
     --name "$BOX_NAME" \
     --image "$IMAGE" \
-    --additional-flags "--env CONTAINER_HOST=unix:///run/host/run/user/$(id -u)/podman/podman.sock"
+    --nvidia \
+    --additional-flags "--env CONTAINER_HOST=unix:///run/host/run/user/$(id -u)/podman/podman.sock" \
+    --additional-flags "--env DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1"
 
 else
   echo "[*] Distrobox '$BOX_NAME' already exists, skipping creation."
