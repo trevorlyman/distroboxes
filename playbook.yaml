@@ -1,0 +1,55 @@
+---
+- name: Setup Dev Box
+  hosts: localhost
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Import Microsoft GPG key
+      rpm_key:
+        state: present
+        key: https://packages.microsoft.com/keys/microsoft.asc
+
+    - name: Add VS Code repo
+      copy:
+        dest: /etc/yum.repos.d/vscode.repo
+        content: |
+          [code]
+          name=Visual Studio Code
+          baseurl=https://packages.microsoft.com/yumrepos/vscode
+          enabled=1
+          gpgcheck=1
+          gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+      notify: refresh dnf cache
+
+    - name: Install required packages
+      package:
+        name:
+          - btop
+          - code
+          - podman
+          - dotnet-sdk-9.0
+          - git 
+          - golang
+          - htop
+          - neovim          
+        state: present
+
+#    - name: Create Podman config directory
+#      file:
+#        path: "{{ lookup('env', 'HOME') }}/.config/containers"
+#        state: directory
+#        mode: '0755'
+
+#    - name: Configure Podman to use host storage path
+#      copy:
+#        dest: "{{ lookup('env', 'HOME') }}/.config/containers/storage.conf"
+#        content: |
+#          [storage]
+#          driver = "overlay"
+#          runroot = "/run/user/{{ lookup('env', 'UID') }}"
+#          graphroot = "/var/home/{{ lookup('env', 'USER') }}/.local/share/containers/storage"
+
+  handlers:
+    - name: refresh dnf cache
+      command: dnf makecache
+
