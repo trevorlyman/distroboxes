@@ -34,21 +34,6 @@
           - neovim          
         state: present
 
-#    - name: Create Podman config directory
-#      file:
-#        path: "{{ lookup('env', 'HOME') }}/.config/containers"
-#        state: directory
-#        mode: '0755'
-
-#    - name: Configure Podman to use host storage path
-#      copy:
-#        dest: "{{ lookup('env', 'HOME') }}/.config/containers/storage.conf"
-#        content: |
-#          [storage]
-#          driver = "overlay"
-#          runroot = "/run/user/{{ lookup('env', 'UID') }}"
-#          graphroot = "/var/home/{{ lookup('env', 'USER') }}/.local/share/containers/storage"
-
   handlers:
     - name: refresh dnf cache
       command: dnf makecache
