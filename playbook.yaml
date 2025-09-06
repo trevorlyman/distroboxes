@@ -21,17 +21,26 @@
           gpgkey=https://packages.microsoft.com/keys/microsoft.asc
       notify: refresh dnf cache
 
+    - name: Add HashiCorp DNF/YUM Repository
+      ansible.builtin.get_url:
+        url: https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+        dest: /etc/yum.repos.d/hashicorp.repo
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: Install required packages
       package:
         name:
           - btop
           - code
-          - podman
+          - moby-engine
           - dotnet-sdk-9.0
           - git 
           - golang
           - htop
-          - neovim          
+          - neovim
+          - terraform          
         state: present
 
   handlers:
